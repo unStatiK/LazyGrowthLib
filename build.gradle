@@ -1,0 +1,24 @@
+plugins {
+    id 'groovy'
+}
+
+apply plugin: 'groovy'
+
+group = 'lazy.growthlib'
+version = '1.0-SNAPSHOT'
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.apache.groovy:groovy-all:4.0.30'
+    testImplementation 'org.spockframework:spock-core:2.4-groovy-4.0'
+}
+
+test {
+    useJUnitPlatform()
+}
