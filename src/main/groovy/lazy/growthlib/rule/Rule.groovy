@@ -7,6 +7,7 @@ import groovy.transform.TypeChecked
 import groovy.transform.VisibilityOptions
 import groovy.transform.options.Visibility
 import lazy.growthlib.attributes.Attribute
+import lazy.growthlib.attributes.ConditionAttribute
 import lazy.growthlib.utils.AttributesHelper
 
 @CompileStatic
@@ -23,11 +24,16 @@ class Rule {
         new Rule(attributes: attributes, attributesKeySet: attributes.keySet())
     }
 
-    def check(Map<String, Object> parameters) {
+    Boolean check(Map<String, Object> parameters) {
         switch (attributesKeySet.intersect(parameters.keySet()).size() == attributesKeySet.size()) {
             case true:
                 !attributesKeySet.any { attribute ->
-                    attributes[attribute].value != AttributesHelper.convertToAttribute(parameters[attribute]).value
+                    def ruleAttribute = attributes[attribute]
+                    if (!(ruleAttribute instanceof ConditionAttribute)) {
+                        ruleAttribute.value != AttributesHelper.convertToAttribute(parameters[attribute]).value
+                    } else {
+                        !((Closure) ruleAttribute.value)(parameters[attribute])
+                    }
                 }
                 break
             default: false

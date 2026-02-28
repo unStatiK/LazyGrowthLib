@@ -13,7 +13,7 @@ record Feature(String name, List<Rule> rules) {
 
     List<Rule> getRules() { rules }
 
-    def check(Map parameters) {
+    Boolean check(Map parameters) {
         rules.any { rule ->
             rule.check(parameters)
         }
