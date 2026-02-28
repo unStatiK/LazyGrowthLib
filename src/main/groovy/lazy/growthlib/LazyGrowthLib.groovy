@@ -1,18 +1,30 @@
 package lazy.growthlib
 
 import groovy.transform.CompileStatic
+import groovy.transform.Immutable
+import groovy.transform.NullCheck
 import groovy.transform.TypeChecked
+import groovy.transform.VisibilityOptions
+import groovy.transform.options.Visibility
 
 @CompileStatic
 @TypeChecked
+@NullCheck
+@Immutable
+@VisibilityOptions(constructor = Visibility.PRIVATE)
 class LazyGrowthLib {
-    Map<String, Feature> features = [:]
+    private Map<String, Feature> features = [:]
 
-    def storeFeature(Feature feature) {
-        features[feature.name] = feature
+    static LazyGrowthLib of(List<Feature> features) {
+        Map<String, Feature> featuresMap = features.collectEntries { feature ->
+            [(feature.name): feature]
+        }
+        new LazyGrowthLib(features: featuresMap)
     }
 
-    def check(String featureName, Map parameters) {
-        features[featureName]?.check(parameters) ?: false
+    Context check(String featureName) {
+        def feature = features[featureName]
+        def context = new Context()
+        feature ? context.withFeature(features[featureName]) : context
     }
 }
