@@ -18,5 +18,7 @@ def feature = new Feature(name: 'is_payment_allowed', rules: [rule])
 def growthLib = LazyGrowthLib.of([feature])
 
 // check parameters by feature
-growthLib.check('is_payment_allowed').withParameters(['cost': 2.0, 'sender': 'Bob', 'with_tax': true]).execute()
+growthLib.check('is_payment_allowed')
+         .withParameters(['cost': 2.0, 'sender': 'Bob', 'with_tax': true])
+         .execute()
 ```
