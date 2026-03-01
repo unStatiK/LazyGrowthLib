@@ -13,6 +13,19 @@ class RuleTest extends Specification {
         !rule.check(['cost': 1.1])
     }
 
+    def 'test rule with number attribute and primitive value'() {
+        given:
+        long msgId = 1466143705189585058
+        long linkId = 1470040853375353038
+        def rule = new RuleBuilder()
+                .addNumberAttribute('msg_id', msgId)
+                .addNumberAttribute('link_id', linkId)
+                .build()
+
+        expect:
+        rule.check(["msg_id": msgId, "link_id": linkId])
+    }
+
     def 'test rule with string attribute'() {
         given:
         def rule = new RuleBuilder()
