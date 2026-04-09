@@ -22,3 +22,7 @@ growthLib.check('is_payment_allowed')
          .withParameters(['cost': 2.0, 'sender': 'Bob', 'with_tax': true])
          .execute()
 ```
+# ToDo
+
+- [ ] Java example
+- [ ] Publish release on maven central
