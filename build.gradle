@@ -15,7 +15,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.apache.groovy:groovy-all:4.0.30'
+    implementation 'org.apache.groovy:groovy-all:4.0.31'
     testImplementation 'org.spockframework:spock-core:2.4-groovy-4.0'
 }
 
