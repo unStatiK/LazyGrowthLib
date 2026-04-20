@@ -22,6 +22,10 @@ growthLib.check('is_payment_allowed')
          .withParameters(['cost': 2.0, 'sender': 'Bob', 'with_tax': true])
          .execute()
 ```
+
+## Keywords
+groovy jvm rules-engine 
+
 # ToDo
 
 - [ ] Java example
