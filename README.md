@@ -25,4 +25,5 @@ growthLib.check('is_payment_allowed')
 # ToDo
 
 - [ ] Java example
+- [ ] Kotlin example
 - [ ] Publish release on maven central
