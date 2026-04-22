@@ -1,5 +1,6 @@
 import lazy.growthlib.rule.RuleBuilder
 import spock.lang.Specification
+import java.util.function.Function
 
 class RuleTest extends Specification {
     def 'test rule with number attribute'() {
@@ -48,13 +49,35 @@ class RuleTest extends Specification {
         !rule.check(['archive': false])
     }
 
-    def 'test rule with condition attribute'() {
+    def 'test rule with closure condition attribute'() {
         given:
         def rule = new RuleBuilder()
                 .addConditionAttribute('tax', { it > 10 })
                 .addConditionAttribute('cost', { it >= 20 })
                 .addConditionAttribute('count', { it == 30 })
                 .addConditionAttribute('type', { it == 'debug' || it == 'archive' })
+                .build()
+
+        expect:
+        rule.check(['tax': 11, 'cost': 21, 'count': 30, 'type': 'debug'])
+        rule.check(['tax': 11, 'cost': 21, 'count': 30, 'type': 'archive'])
+        rule.check(['tax': 11, 'cost': 20, 'count': 30, 'type': 'archive'])
+        rule.check(['tax': 11, 'cost': 20, 'count': 30, 'type': 'debug'])
+        !rule.check(['tax': 10])
+        !rule.check(['tax': 10, 'cost': 21, 'count': 30, 'type': 'archive'])
+        !rule.check(['tax': 11, 'cost': 19, 'count': 30, 'type': 'archive'])
+        !rule.check(['tax': 11, 'cost': 21, 'count': 31, 'type': 'archive'])
+        !rule.check(['tax': 11, 'cost': 21, 'count': 30, 'type': 'test'])
+    }
+
+    def 'test rule with function condition attribute'() {
+        given:
+        def rule = new RuleBuilder()
+                .addConditionAttribute('tax', [apply: { Integer it -> return it > 10 }] as Function)
+                .addConditionAttribute('cost', [apply: { Integer it -> return it >= 20 }] as Function)
+                .addConditionAttribute('count', [apply: { Integer it -> return it == 30 }] as Function)
+                .addConditionAttribute('type',
+                        [apply: { String it -> return it == 'debug' || it == 'archive' }] as Function)
                 .build()
 
         expect:

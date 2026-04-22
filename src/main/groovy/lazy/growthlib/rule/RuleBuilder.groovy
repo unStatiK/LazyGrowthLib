@@ -8,6 +8,7 @@ import lazy.growthlib.attributes.BooleanAttribute
 import lazy.growthlib.attributes.ConditionAttribute
 import lazy.growthlib.attributes.NumberAttribute
 import lazy.growthlib.attributes.StringAttribute
+import java.util.function.Function
 
 @NullCheck
 @CompileStatic
@@ -31,6 +32,11 @@ class RuleBuilder {
     }
 
     RuleBuilder addConditionAttribute(String attribute, Closure<Boolean> value) {
+        this.attributes[attribute] = ConditionAttribute.of(value)
+        this
+    }
+
+    RuleBuilder addConditionAttribute(String attribute, Function<Object, Boolean> value) {
         this.attributes[attribute] = ConditionAttribute.of(value)
         this
     }

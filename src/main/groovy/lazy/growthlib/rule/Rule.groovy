@@ -9,6 +9,9 @@ import groovy.transform.options.Visibility
 import lazy.growthlib.attributes.Attribute
 import lazy.growthlib.attributes.ConditionAttribute
 import lazy.growthlib.utils.AttributesHelper
+import lazy.growthlib.value.ConditionValue
+import lazy.growthlib.value.ConditionValueType
+import java.util.function.Function
 
 @CompileStatic
 @TypeChecked
@@ -32,7 +35,15 @@ class Rule {
                     if (!(ruleAttribute instanceof ConditionAttribute)) {
                         ruleAttribute.value != AttributesHelper.convertToAttribute(parameters[attribute]).value
                     } else {
-                        !((Closure) ruleAttribute.value)(parameters[attribute])
+                        ConditionValue conditionValue = (ConditionValue) ruleAttribute.value
+                        switch (conditionValue.type) {
+                            case ConditionValueType.CLOSURE:
+                                !((Closure) conditionValue.value)(parameters[attribute])
+                                break
+                            case ConditionValueType.FUNCTION:
+                                !((Function) conditionValue.value)(parameters[attribute])
+                                break
+                        }
                     }
                 }
                 break
